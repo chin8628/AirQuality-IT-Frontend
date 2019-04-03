@@ -1,0 +1,32 @@
+{
+  "name": "airquality-it-frontend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node server.js",
+    "build": "next build",
+    "start": "NODE_ENV=production node server.js",
+    "export": "next export",
+    "deploy": "npm run build && npm run export"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chin8628/AirQuality-IT-Frontend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chin8628/AirQuality-IT-Frontend/issues"
+  },
+  "homepage": "https://github.com/chin8628/AirQuality-IT-Frontend#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "isomorphic-unfetch": "^3.0.0",
+    "next": "^8.0.4",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-markdown": "^4.0.6"
+  }
+}
