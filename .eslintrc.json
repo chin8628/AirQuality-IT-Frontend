@@ -18,6 +18,7 @@
   "plugins": ["react"],
   "rules": {
     "semi": [2, "never"],
-    "react/jsx-one-expression-per-line": [1, "single-child"]
+    "react/jsx-one-expression-per-line": [0],
+    "quotes": ["error", "single"]
   }
 }

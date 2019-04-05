@@ -1,7 +1,6 @@
-import React from "react";
-import PropTypes from "prop-types";
-import styled from "styled-components";
-import { Line } from "react-chartjs-2";
+import React from 'react'
+import styled from 'styled-components'
+import Chart from './Chart'
 
 const Card = styled.div`
   background: #ffffff;
@@ -13,12 +12,12 @@ const Card = styled.div`
   margin-left: 1em;
   margin-right: 1em;
   margin-bottom: 2em;
-`;
+`
 
 const Pollutant = styled.div`
   text-align: center;
   color: #b7b7b7;
-`;
+`
 
 const Number = styled.div`
   font-size: 6em;
@@ -27,7 +26,7 @@ const Number = styled.div`
   text-align: center;
   text-shadow: 0 0.1em 0.35em rgba(0, 0, 0, 0.12);
   margin-bottom: 0.06em;
-`;
+`
 
 const AqiWrapper = styled.div`
   text-align: center;
@@ -66,7 +65,7 @@ const AqiWrapper = styled.div`
   span.aqi.aqi-harzardous {
     background-color: var(--color-aqi-harzardous);
   }
-`;
+`
 
 const MetaWraper = styled.div`
   text-align: center;
@@ -77,66 +76,14 @@ const MetaWraper = styled.div`
     margin-bottom: 0.5em;
     color: #898989;
   }
-`;
 
-const data = canvas => {
-  const ctx = canvas.getContext("2d");
-  const gradientFill = ctx.createLinearGradient(0, 0, 0, 150);
-  gradientFill.addColorStop(0, "#15D1FA");
-  gradientFill.addColorStop(1, "rgba(21, 209, 250, 0)");
-
-  return {
-    labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-    datasets: [
-      {
-        label: "PM 2.5",
-        backgroundColor: gradientFill,
-        borderColor: "#0FAACC",
-        data: [12, 19, 3, 5, 2, 3]
-      }
-    ]
-  };
-};
-
-const options = {
-  responsive: true,
-  title: {
-    display: false
-  },
-  hover: {
-    mode: "nearest",
-    intersect: true
-  },
-  scales: {
-    xAxes: [
-      {
-        display: false,
-        scaleLabel: {
-          display: true,
-          labelString: "Month"
-        }
-      }
-    ],
-    yAxes: [
-      {
-        display: false,
-        scaleLabel: {
-          display: true,
-          labelString: "Value"
-        }
-      }
-    ]
-  },
-  legend: { display: false },
-  layout: {
-    padding: {
-      left: 0,
-      right: 0,
-      top: 4,
-      bottom: 0
-    }
+  img {
+    width: 1em;
+    height: 1em;
+    position: relative;
+    top: 0.12em;
   }
-};
+`
 
 const SensorCard = props => (
   <>
@@ -158,11 +105,9 @@ const SensorCard = props => (
           17:18
         </span>
       </MetaWraper>
-      <Line data={data} option={option} />
+      <Chart {...props} />
     </Card>
   </>
-);
+)
 
-SensorCard.propTypes = {};
-
-export default SensorCard;
+export default SensorCard

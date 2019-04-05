@@ -7,6 +7,7 @@ const Layout = ({ children }) => (
     <Head>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta charSet="utf-8" />
+      <title>AQI - IT@KMITL</title>
     </Head>
     <style jsx global>
       {`
@@ -28,16 +29,6 @@ const Layout = ({ children }) => (
 
         canvas {
           background: transparent;
-        }
-      `}
-    </style>
-    <style jsx>
-      {`
-        .layout {
-          background: #f7f7f7;
-          padding: 0;
-          margin: 0;
-          fontfamily: -apple-system, 'Segoe UI', Roboto, Ubuntu, sans-serif;
         }
       `}
     </style>
