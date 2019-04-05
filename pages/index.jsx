@@ -70,7 +70,7 @@ function Index() {
               <li>Boonyarith Piriyothinkul</li>
               <li>Nathan Yiangsupapaanontr</li>
               <li>Nopparut Sae-Lim</li>
-              <li>Wiput Poothong</li>
+              <li>Wiput Pootong</li>
             </ul>
             <p style={{ color: '#b7b7b7' }}>With Material icons and Graph.js</p>
           </center>
