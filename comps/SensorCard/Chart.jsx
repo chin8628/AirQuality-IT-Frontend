@@ -49,9 +49,12 @@ const Chart = ({ values }) => {
       ],
       yAxes: [
         {
-          display: false,
+          display: true,
           scaleLabel: {
             display: false,
+          },
+          ticks: {
+            padding: -30,
           },
         },
       ],
