@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Chart from './Chart'
+import firebase from '../../firebase'
 
 const Card = styled.div`
   background: #ffffff;
@@ -89,7 +90,7 @@ const SensorCard = props => (
   <>
     <Card>
       <Pollutant>
-        PM 2.5 (µg/m<sup>3</sup>)
+          PM 2.5 (µg/m<sup>3</sup>)
       </Pollutant>
       <Number>16</Number>
       <AqiWrapper>
@@ -98,11 +99,11 @@ const SensorCard = props => (
       <MetaWraper>
         <span>
           <img src="/static/img/ic-location.svg" alt="location icon" />
-          IT Cafeteria
+            IT Cafeteria
         </span>
         <span>
           <img src="/static/img/ic-clock.svg" alt="clock icon" />
-          17:18
+            17:18
         </span>
       </MetaWraper>
       <Chart {...props} />
