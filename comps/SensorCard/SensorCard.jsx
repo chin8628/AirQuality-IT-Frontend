@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
 import Chart from './Chart'
 import firebase from '../../firebase'
 
@@ -86,11 +87,11 @@ const MetaWraper = styled.div`
   }
 `
 
-const SensorCard = props => (
+const SensorCard = ({ location }) => (
   <>
     <Card>
       <Pollutant>
-          PM 2.5 (µg/m<sup>3</sup>)
+        PM 2.5 (µg/m<sup>3</sup>)
       </Pollutant>
       <Number>16</Number>
       <AqiWrapper>
@@ -99,16 +100,20 @@ const SensorCard = props => (
       <MetaWraper>
         <span>
           <img src="/static/img/ic-location.svg" alt="location icon" />
-            IT Cafeteria
+          {location}
         </span>
         <span>
           <img src="/static/img/ic-clock.svg" alt="clock icon" />
-            17:18
+          17:18
         </span>
       </MetaWraper>
-      <Chart {...props} />
+      <Chart />
     </Card>
   </>
 )
+
+SensorCard.propTypes = {
+  location: PropTypes.string.isRequired,
+}
 
 export default SensorCard

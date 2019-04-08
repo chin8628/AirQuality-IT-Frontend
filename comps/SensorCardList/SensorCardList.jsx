@@ -1,20 +1,22 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import firebase from '../../firebase'
 import SensorCard from '../SensorCard'
 
 const SensorCardList = () => {
-  let devices = {}
-  const aqiLogRef = firebase.database().ref('/')
-  aqiLogRef.on('value', (snapshot) => {
-    devices = snapshot.val()
-  })
+  const [devices, setDevices] = useState({})
+
+  useEffect(() => {
+    const aqiLogRef = firebase.database().ref('/')
+
+    aqiLogRef.on('value', (snapshot) => {
+      setDevices(snapshot.val())
+    })
+  }, devices)
 
   const deviceNames = Object.keys(devices)
   const devicesArr = deviceNames.map(deviceName => devices[deviceName])
 
-  console.log(deviceNames)
-
-  return devicesArr.map(() => <SensorCard />)
+  return devicesArr.map(device => <SensorCard location={device.location} />)
 }
 
 export default SensorCardList
