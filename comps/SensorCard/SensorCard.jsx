@@ -87,33 +87,48 @@ const MetaWraper = styled.div`
   }
 `
 
-const SensorCard = ({ location }) => (
-  <>
-    <Card>
-      <Pollutant>
-        PM 2.5 (µg/m<sup>3</sup>)
-      </Pollutant>
-      <Number>16</Number>
-      <AqiWrapper>
-        <span className="aqi aqi-good">Healthy</span>
-      </AqiWrapper>
-      <MetaWraper>
-        <span>
-          <img src="/static/img/ic-location.svg" alt="location icon" />
-          {location}
-        </span>
-        <span>
-          <img src="/static/img/ic-clock.svg" alt="clock icon" />
-          17:18
-        </span>
-      </MetaWraper>
-      <Chart values={[0, 0, 0, 0, 0, 0]} />
-    </Card>
-  </>
-)
+const SensorCard = ({ location, aqiLogs }) => {
+  const keys = Object.keys(aqiLogs).sort()
+  const currentPm = aqiLogs[keys[keys.length - 1]]
+  console.log(currentPm)
+
+  return (
+    <>
+      <Card>
+        <Pollutant>
+          PM 2.5 (µg/m<sup>3</sup>)
+        </Pollutant>
+        <Number>{currentPm.pm25}</Number>
+        <AqiWrapper>
+          <span className="aqi aqi-good">Healthy</span>
+        </AqiWrapper>
+        <MetaWraper>
+          <span>
+            <img src="/static/img/ic-location.svg" alt="location icon" />
+            {location}
+          </span>
+          <span>
+            <img src="/static/img/ic-clock.svg" alt="clock icon" />
+            17:18
+          </span>
+        </MetaWraper>
+        <Chart values={[0, 0, 0, 0, 0, 0]} />
+      </Card>
+    </>
+  )
+}
 
 SensorCard.propTypes = {
   location: PropTypes.string.isRequired,
+  aqiLogs: PropTypes.objectOf(
+    PropTypes.objectOf(
+      PropTypes.shape({
+        pm100: PropTypes.number.isRequired,
+        pm25: PropTypes.number.isRequired,
+        pm10: PropTypes.number.isRequired,
+      }),
+    ),
+  ).isRequired,
 }
 
 export default SensorCard
