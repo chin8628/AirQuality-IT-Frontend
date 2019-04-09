@@ -107,7 +107,7 @@ const SensorCard = ({ location }) => (
           17:18
         </span>
       </MetaWraper>
-      <Chart />
+      <Chart values={[0, 0, 0, 0, 0, 0]} />
     </Card>
   </>
 )

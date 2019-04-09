@@ -33,6 +33,7 @@
     "react": "^16.8.6",
     "react-chartjs-2": "^2.7.6",
     "react-dom": "^16.8.6",
+    "react-fontawesome": "^1.6.1",
     "react-markdown": "^4.0.6",
     "react-redux": "^6.0.1",
     "redux": "^4.0.1",

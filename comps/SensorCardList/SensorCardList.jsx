@@ -9,6 +9,7 @@ const SensorCardList = () => {
     const aqiLogRef = firebase.database().ref('/')
 
     aqiLogRef.on('value', (snapshot) => {
+      console.log(snapshot.val())
       setDevices(snapshot.val())
     })
   }, devices)
@@ -16,7 +17,9 @@ const SensorCardList = () => {
   const deviceNames = Object.keys(devices)
   const devicesArr = deviceNames.map(deviceName => devices[deviceName])
 
-  return devicesArr.map(device => <SensorCard location={device.location} />)
+  return devicesArr.map(device => (
+    <SensorCard location={device.location} key={devicesArr.indexOf(device)} />
+  ))
 }
 
 export default SensorCardList

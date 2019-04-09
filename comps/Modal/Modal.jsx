@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import FontAwesome from 'react-fontawesome'
 
 const StyledModal = styled.div`
   box-sizing: border-box;
@@ -31,8 +32,8 @@ const ModalContainer = styled.div`
 const CloseBtn = styled.button`
   position: absolute;
   top: 0.5em;
-  right: 1em;
-  width: 24px;
+  right: 0.5em;
+  text-align: center;
   background: none;
   border: 0;
 `
@@ -41,7 +42,7 @@ const Modal = ({ children, handleClose }) => (
   <StyledModal>
     <ModalContainer>
       <CloseBtn onClick={handleClose}>
-        <img src="/static/img/ic-close.svg" alt="close" />
+        <FontAwesome name="times" size="1x" />
       </CloseBtn>
       {children}
     </ModalContainer>

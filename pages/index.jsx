@@ -57,9 +57,7 @@ function Index() {
         </Content>
         <Bottom>
           <img src="/static/img/itkmitl-logo.png" alt="IT KMITL Logo" />
-          <AboutBtn type="button" onClick={() => setIsModalOpen(!isModalOpen)}>
-            About this project
-          </AboutBtn>
+          <AboutBtn onClick={() => setIsModalOpen(!isModalOpen)}>About this project</AboutBtn>
         </Bottom>
       </Container>
 
