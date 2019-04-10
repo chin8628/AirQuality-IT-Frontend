@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import Layout from '../comps/Layout'
 import SensorCard from '../comps/SensorCard'
+import SensorCardList from '../comps/SensorCardList'
 import Modal from '../comps/Modal'
 
 const Container = styled.div`
@@ -51,13 +52,11 @@ function Index() {
     <Layout>
       <Container>
         <Content>
-          <SensorCard values={[52, 58, 69, 14, 85, 36]} />
+          <SensorCardList />
         </Content>
         <Bottom>
           <img src="/static/img/itkmitl-logo.png" alt="IT KMITL Logo" />
-          <AboutBtn type="button" onClick={() => setIsModalOpen(!isModalOpen)}>
-            About this project
-          </AboutBtn>
+          <AboutBtn onClick={() => setIsModalOpen(!isModalOpen)}>About this project</AboutBtn>
         </Bottom>
       </Container>
 
