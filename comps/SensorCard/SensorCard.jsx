@@ -93,7 +93,7 @@ const SensorCard = ({ deviceId, location }) => {
   const [currentTime, setCurrentTime] = useState('00:00')
   const [warning, setWarning] = useState('Healthy')
   const [colorTag, setColorTag] = useState('healthy')
-  const [chartData, setChartData] = useState({ values: [], labels: [] })
+  // const [chartData, setChartData] = useState({ values: [], labels: [] })
 
   useEffect(() => {
     firebase
@@ -105,20 +105,20 @@ const SensorCard = ({ deviceId, location }) => {
         const latestVal = data.val()[keys[keys.length - 1]]
 
         if (latestVal !== undefined && Object.keys(latestVal).length === 3) {
-          const groupedKeys = _.groupBy(keys, (x) => {
-            const date = new Date(parseInt(x, 10) * 1000)
-            return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ${date.getHours()}:00`
-          })
+          // const groupedKeys = _.groupBy(keys, (x) => {
+          //   const date = new Date(parseInt(x, 10) * 1000)
+          //   return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ${date.getHours()}:00`
+          // })
 
-          const labels = Object.keys(groupedKeys).slice(9)
-          const hourPm25 = labels.map((label) => {
-            const timestamps = _.sampleSize(groupedKeys[label], 6)
-            const numbers = timestamps.map(timestamp => data.val()[timestamp].pm25)
+          // const labels = Object.keys(groupedKeys).slice(9)
+          // const hourPm25 = labels.map((label) => {
+          //   const timestamps = _.sampleSize(groupedKeys[label], 6)
+          //   const numbers = timestamps.map(timestamp => data.val()[timestamp].pm25)
 
-            return _.round(_.mean(numbers), 2)
-          })
+          //   return _.round(_.mean(numbers), 2)
+          // })
 
-          setChartData({ values: hourPm25, labels })
+          // setChartData({ values: hourPm25, labels })
           setAqiLogs(data.val())
 
           const time = new Date(keys[keys.length - 1] * 1000)
@@ -167,7 +167,7 @@ const SensorCard = ({ deviceId, location }) => {
             {currentTime}
           </span>
         </MetaWraper>
-        <Chart {...chartData} />
+        {/* <Chart {...chartData} /> */}
       </Card>
     </>
   )
