@@ -42,7 +42,7 @@ const Modal = ({ children, handleClose }) => (
   <StyledModal>
     <ModalContainer>
       <CloseBtn onClick={handleClose}>
-        <FontAwesome name="times" size="1x" />
+        <FontAwesome name="times" />
       </CloseBtn>
       {children}
     </ModalContainer>

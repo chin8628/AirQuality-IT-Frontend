@@ -52,7 +52,6 @@ function Index() {
     <Layout>
       <Container>
         <Content>
-          {/* <SensorCard values={[52, 58, 69, 14, 85, 36]} /> */}
           <SensorCardList />
         </Content>
         <Bottom>

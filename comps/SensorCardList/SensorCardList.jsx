@@ -4,47 +4,20 @@ import SensorCard from '../SensorCard'
 
 const SensorCardList = () => {
   const [devices, setDevices] = useState({})
-  const [deviceIds, setDeviceIds] = useState([])
 
   useEffect(() => {
-    const getDeviceIds = async () => {
-      const snapshot = await firebase
-        .database()
-        .ref('/')
-        .once('value')
-
-      console.log(snapshot.val())
-    }
-
-    getDeviceIds()
-
-    // deviceIds.map((deviceId) => {
-    //   const aqiLogRef = firebase.database().ref(`/${deviceId}`)
-
-    //   aqiLogRef.on('value', (snapshot) => {
-    //     const value = snapshot.val()
-
-    //     if (Object.keys(value).length === 3) {
-    //       console.log(snapshot.val())
-    //       setDevices(snapshot.val())
-    //     }
-    //   })
-    // })
+    firebase
+      .database()
+      .ref('/')
+      .once('value')
+      .then(data => setDevices(data.val()))
   }, devices)
 
-  console.log(deviceIds)
-
-  const deviceNames = Object.keys(devices)
-  const devicesArr = deviceNames.map(deviceName => devices[deviceName])
-
-  return devicesArr
-    .filter(device => device['aqi-log'])
-    .map(device => (
-      <SensorCard
-        location={device.location}
-        aqiLogs={device['aqi-log']}
-        key={devicesArr.indexOf(device)}
-      />
+  const deviceIds = Object.keys(devices)
+  return deviceIds
+    .filter(deviceId => devices[deviceId]['aqi-log'])
+    .map(deviceId => (
+      <SensorCard key={deviceId} deviceId={deviceId} location={devices[deviceId].location} />
     ))
 }
 

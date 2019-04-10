@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Line } from 'react-chartjs-2'
 
-const Chart = ({ values }) => {
+const Chart = ({ values, labels }) => {
   const data = (canvas) => {
     const ctx = canvas.getContext('2d')
     const gradientFill = ctx.createLinearGradient(0, 0, 0, 150)
@@ -10,14 +10,7 @@ const Chart = ({ values }) => {
     gradientFill.addColorStop(1, 'rgba(21, 209, 250, 0)')
 
     return {
-      labels: [
-        new Date('2019-04-04T01:00:00'),
-        new Date('2019-04-04T02:00:00'),
-        new Date('2019-04-04T03:00:00'),
-        new Date('2019-04-04T04:00:00'),
-        new Date('2019-04-04T05:00:00'),
-        new Date('2019-04-04T06:00:00'),
-      ],
+      labels,
       datasets: [
         {
           label: 'PM 2.5',
@@ -75,6 +68,7 @@ const Chart = ({ values }) => {
 
 Chart.propTypes = {
   values: PropTypes.arrayOf(PropTypes.number).isRequired,
+  labels: PropTypes.arrayOf(PropTypes.string).isRequired,
 }
 
 export default Chart
