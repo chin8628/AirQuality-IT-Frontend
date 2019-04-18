@@ -1,24 +1,21 @@
-import React, { useState, useEffect } from 'react'
-import firebase from '../../firebase'
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
+import { getDevices } from '../../redux/device/action'
+
 import SensorCard from '../SensorCard'
 
-const SensorCardList = () => {
-  const [devices, setDevices] = useState({})
-
+const SensorCardList = ({ dispatch, devices }) => {
   useEffect(() => {
-    firebase
-      .database()
-      .ref('/')
-      .once('value')
-      .then(data => setDevices(data.val()))
-  }, devices)
+    dispatch(getDevices())
+  }, [])
 
-  const deviceIds = Object.keys(devices)
-  return deviceIds
-    .filter(deviceId => devices[deviceId]['aqi-log'])
-    .map(deviceId => (
-      <SensorCard key={deviceId} deviceId={deviceId} location={devices[deviceId].location} />
-    ))
+  return devices.map(device => (
+    <SensorCard key={device.device_id} deviceId={device.device_id} location={device.location} />
+  ))
 }
 
-export default SensorCardList
+const mapStateToProps = state => ({
+  devices: state.device.devices,
+})
+
+export default connect(mapStateToProps)(SensorCardList)

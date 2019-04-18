@@ -23,6 +23,7 @@
   "homepage": "https://github.com/chin8628/AirQuality-IT-Frontend#readme",
   "dependencies": {
     "@zeit/next-sass": "^1.0.1",
+    "axios": "^0.18.0",
     "chart.js": "^2.8.0",
     "express": "^4.16.4",
     "firebase": "^5.9.3",
@@ -48,6 +49,7 @@
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-jsx-a11y": "^6.2.1",
-    "eslint-plugin-react": "^7.12.4"
+    "eslint-plugin-react": "^7.12.4",
+    "babel-plugin-styled-components": "^1.8.0"
   }
 }

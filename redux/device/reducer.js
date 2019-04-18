@@ -3,14 +3,7 @@ import { REQUEST, RECEIVE, ERROR } from './action'
 const defaultState = {
   isLoading: true,
   isFailed: false,
-  aqiList: [],
-  lastestAqi: {
-    pm25: 0,
-    pm100: 0,
-    pm10: 0,
-    created_at: '',
-    device_id: 0,
-  },
+  devices: [],
 }
 
 export default (state = defaultState, action) => {
@@ -18,12 +11,13 @@ export default (state = defaultState, action) => {
     case REQUEST:
       return {
         ...state,
+        isLoading: true,
       }
     case RECEIVE:
       return {
         ...state,
         isLoading: false,
-        lastestAqi: action.payload,
+        devices: action.payload,
       }
     case ERROR:
     default:
