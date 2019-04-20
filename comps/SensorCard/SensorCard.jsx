@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import * as _ from 'lodash'
 import Chart from './Chart'
-import firebase from '../../firebase'
+import api from '../../lib/api'
 
 const Card = styled.div`
   background: #ffffff;
@@ -89,63 +89,71 @@ const MetaWraper = styled.div`
 `
 
 const SensorCard = ({ deviceId, location }) => {
-  const [aqiLogs, setAqiLogs] = useState({ 0: { pm100: 0, pm25: 0, pm10: 0 } })
-  const [currentTime, setCurrentTime] = useState('00:00')
-  const [warning, setWarning] = useState('Healthy')
-  const [colorTag, setColorTag] = useState('healthy')
-  // const [chartData, setChartData] = useState({ values: [], labels: [] })
+  const [isLastestAqiLoading, setIsLastestAqiLoading] = useState(true)
+  const [label, setLabel] = useState({ warningLabel: 'n/a', colorTag: 'na' })
+  const [lastestAqi, setLastestAqi] = useState({
+    pm25: 0,
+    pm100: 0,
+    pm10: 0,
+    created_at: 'n/a',
+    device_id: 0,
+  })
+  const [isAqiLogsLoading, setisAqiLogsLoading] = useState(true)
+  const [chartValue, setChartValue] = useState({
+    values: [],
+    labels: [],
+  })
 
   useEffect(() => {
-    firebase
-      .database()
-      .ref(`/${deviceId}/aqi-log`)
-      .orderByKey()
-      .on('value', (data) => {
-        const keys = Object.keys(data.val())
-        const latestVal = data.val()[keys[keys.length - 1]]
+    api.get(`/aqi_logs/${deviceId}/lastest`).then((res) => {
+      const { data } = res
 
-        if (latestVal !== undefined && Object.keys(latestVal).length === 3) {
-          // const groupedKeys = _.groupBy(keys, (x) => {
-          //   const date = new Date(parseInt(x, 10) * 1000)
-          //   return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ${date.getHours()}:00`
-          // })
-
-          // const labels = Object.keys(groupedKeys).slice(9)
-          // const hourPm25 = labels.map((label) => {
-          //   const timestamps = _.sampleSize(groupedKeys[label], 6)
-          //   const numbers = timestamps.map(timestamp => data.val()[timestamp].pm25)
-
-          //   return _.round(_.mean(numbers), 2)
-          // })
-
-          // setChartData({ values: hourPm25, labels })
-          setAqiLogs(data.val())
-
-          const time = new Date(keys[keys.length - 1] * 1000)
-          setCurrentTime(`${time.getHours()}:${time.getMinutes()}`)
-
-          if (latestVal.pm25 < 26) {
-            setWarning('Healthy')
-            setColorTag('healthy')
-          } else if (latestVal.pm25 < 38) {
-            setWarning('Moderate')
-            setColorTag('moderate')
-          } else if (latestVal.pm25 < 51) {
-            setWarning('Unhealthy for sensitive')
-            setColorTag('sensitive')
-          } else if (latestVal.pm25 < 91) {
-            setWarning('Unhealthy')
-            setColorTag('unhealthy')
-          } else {
-            setWarning('Hazardous')
-            setColorTag('harzardous')
-          }
-        }
+      const createdAt = new Date(data.created_at)
+      const createdAtStr = `${createdAt.getDate()}/${createdAt.getMonth()}/${createdAt.getFullYear()} ${createdAt.getHours()}:${`0${createdAt.getMinutes()}`.slice(
+        -2,
+      )}`
+      setLastestAqi({
+        ...data,
+        created_at: createdAtStr,
       })
+
+      if (data.pm25 < 26) {
+        setLabel({ warningLabel: 'Healthy', colorTag: 'healthy' })
+      } else if (data.pm25 < 38) {
+        setLabel({ warningLabel: 'Moderate', colorTag: 'moderate' })
+      } else if (data.pm25 < 51) {
+        setLabel({ warningLabel: 'Unhealthy for sensitive', colorTag: 'sensitive' })
+      } else if (data.pm25 < 91) {
+        setLabel({ warningLabel: 'Unhealthy', colorTag: 'unhealthy' })
+      } else {
+        setLabel({ warningLabel: 'Hazardous', colorTag: 'harzardous' })
+      }
+
+      setIsLastestAqiLoading(false)
+    })
+
+    api.get(`/aqi_logs/${deviceId}/24`).then((res) => {
+      const { data } = res
+
+      const values = data.map(log => parseInt(log.avg_pm25, 10))
+      const chartLabel = data.map((log) => {
+        const date = new Date(log.created_at_trunced_hour)
+        return `${date.getHours()}:${`0${date.getMinutes()}`.slice(-2)}`
+      })
+
+      setChartValue({ values, labels: chartLabel })
+      setisAqiLogsLoading(false)
+    })
   }, [])
 
-  const keys = Object.keys(aqiLogs)
-  const lastestAQI = aqiLogs[keys[keys.length - 1]]
+  // If the api cannot found any aqi log, then don't render the card
+  if (lastestAqi.pm25 === null && lastestAqi.pm100 === null && lastestAqi.pm10 === null) {
+    return null
+  }
+
+  if (isAqiLogsLoading && isLastestAqiLoading) {
+    return 'Loading...'
+  }
 
   return (
     <>
@@ -153,9 +161,9 @@ const SensorCard = ({ deviceId, location }) => {
         <Pollutant>
           PM 2.5 (µg/m<sup>3</sup>)
         </Pollutant>
-        <Number>{lastestAQI.pm25}</Number>
+        <Number>{lastestAqi.pm25}</Number>
         <AqiWrapper>
-          <span className={`aqi aqi-${colorTag}`}>{warning}</span>
+          <span className={`aqi aqi-${label.colorTag}`}>{label.warningLabel}</span>
         </AqiWrapper>
         <MetaWraper>
           <span>
@@ -164,17 +172,17 @@ const SensorCard = ({ deviceId, location }) => {
           </span>
           <span>
             <img src="/static/img/ic-clock.svg" alt="clock icon" />
-            {currentTime}
+            {lastestAqi.created_at}
           </span>
         </MetaWraper>
-        {/* <Chart {...chartData} /> */}
+        <Chart {...chartValue} />
       </Card>
     </>
   )
 }
 
 SensorCard.propTypes = {
-  deviceId: PropTypes.string.isRequired,
+  deviceId: PropTypes.number.isRequired,
   location: PropTypes.string.isRequired,
 }
 
