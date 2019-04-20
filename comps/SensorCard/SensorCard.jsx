@@ -89,7 +89,7 @@ const MetaWraper = styled.div`
 `
 
 const SensorCard = ({ deviceId, location }) => {
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLastestAqiLoading, setIsLastestAqiLoading] = useState(true)
   const [label, setLabel] = useState({ warningLabel: 'n/a', colorTag: 'na' })
   const [lastestAqi, setLastestAqi] = useState({
     pm25: 0,
@@ -98,13 +98,20 @@ const SensorCard = ({ deviceId, location }) => {
     created_at: 'n/a',
     device_id: 0,
   })
+  const [isAqiLogsLoading, setisAqiLogsLoading] = useState(true)
+  const [chartValue, setChartValue] = useState({
+    values: [],
+    labels: [],
+  })
 
   useEffect(() => {
     api.get(`/aqi_logs/${deviceId}/lastest`).then((res) => {
       const { data } = res
 
       const createdAt = new Date(data.created_at)
-      const createdAtStr = `${createdAt.getDate()}/${createdAt.getMonth()}/${createdAt.getFullYear()} ${createdAt.getHours()}:${createdAt.getMinutes()}`
+      const createdAtStr = `${createdAt.getDate()}/${createdAt.getMonth()}/${createdAt.getFullYear()} ${createdAt.getHours()}:${`0${createdAt.getMinutes()}`.slice(
+        -2,
+      )}`
       setLastestAqi({
         ...data,
         created_at: createdAtStr,
@@ -122,7 +129,20 @@ const SensorCard = ({ deviceId, location }) => {
         setLabel({ warningLabel: 'Hazardous', colorTag: 'harzardous' })
       }
 
-      setIsLoading(false)
+      setIsLastestAqiLoading(false)
+    })
+
+    api.get(`/aqi_logs/${deviceId}/24`).then((res) => {
+      const { data } = res
+
+      const values = data.map(log => parseInt(log.avg_pm25, 10))
+      const chartLabel = data.map((log) => {
+        const date = new Date(log.created_at_trunced_hour)
+        return `${date.getHours()}:${`0${date.getMinutes()}`.slice(-2)}`
+      })
+
+      setChartValue({ values, labels: chartLabel })
+      setisAqiLogsLoading(false)
     })
   }, [])
 
@@ -131,7 +151,7 @@ const SensorCard = ({ deviceId, location }) => {
     return null
   }
 
-  if (isLoading) {
+  if (isAqiLogsLoading && isLastestAqiLoading) {
     return 'Loading...'
   }
 
@@ -155,7 +175,7 @@ const SensorCard = ({ deviceId, location }) => {
             {lastestAqi.created_at}
           </span>
         </MetaWraper>
-        {/* <Chart {...chartData} /> */}
+        <Chart {...chartValue} />
       </Card>
     </>
   )
@@ -164,13 +184,6 @@ const SensorCard = ({ deviceId, location }) => {
 SensorCard.propTypes = {
   deviceId: PropTypes.number.isRequired,
   location: PropTypes.string.isRequired,
-  lastestAqi: PropTypes.shape({
-    pm25: PropTypes.number.isRequired,
-    pm100: PropTypes.number.isRequired,
-    pm10: PropTypes.number.isRequired,
-    created_at: PropTypes.string.isRequired,
-    device_id: PropTypes.number.isRequired,
-  }).isRequired,
 }
 
 export default SensorCard
