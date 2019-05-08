@@ -52,7 +52,6 @@ const MetaWraper = styled.div`
 
 const SensorCard = ({ deviceId, location }) => {
   const [isLastestAqiLoading, setIsLastestAqiLoading] = useState(true)
-
   const [lastestAqi, setLastestAqi] = useState({
     pm25: 0,
     pm100: 0,
@@ -71,9 +70,11 @@ const SensorCard = ({ deviceId, location }) => {
       const { data } = res
 
       const createdAt = new Date(data.created_at)
-      const createdAtStr = `${createdAt.getDate()}/${createdAt.getMonth()}/${createdAt.getFullYear()} ${createdAt.getHours()}:${`0${createdAt.getMinutes()}`.slice(
-        -2,
-      )}`
+      const dateStr = `${createdAt.getDate()}/${createdAt.getMonth()}/${createdAt.getFullYear()}`
+      const minuteStr = `0${createdAt.getMinutes()}`.slice(-2)
+      const timeStr = `${createdAt.getHours()}:${minuteStr}`
+      const createdAtStr = `${dateStr} ${timeStr}`
+
       setLastestAqi({
         ...data,
         created_at: createdAtStr,

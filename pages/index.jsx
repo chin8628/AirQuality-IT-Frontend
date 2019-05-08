@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import Layout from '../comps/Layout'
-import SensorCard from '../comps/SensorCard'
 import SensorCardList from '../comps/SensorCardList'
 import Modal from '../comps/Modal'
 
