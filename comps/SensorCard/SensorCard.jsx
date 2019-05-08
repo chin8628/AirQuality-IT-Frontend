@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import * as _ from 'lodash'
 import Chart from './Chart'
 import api from '../../lib/api'
+import AqiLabel from '../AqiLabel'
 
 const Card = styled.div`
   background: #ffffff;
@@ -31,45 +32,6 @@ const Number = styled.div`
   margin-bottom: 0.06em;
 `
 
-const AqiWrapper = styled.div`
-  text-align: center;
-
-  span {
-    display: inline-block;
-    padding: 0.3em 0.5em;
-    margin-bottom: 1em;
-    background-color: #000;
-    color: #fff;
-    font-weight: bold;
-  }
-
-  /* Colours for AQI levels */
-  span.aqi.aqi-healthy {
-    background-color: var(--color-aqi-good);
-  }
-
-  span.aqi.aqi-moderate {
-    background-color: var(--color-aqi-moderate);
-    color: #000;
-  }
-
-  span.aqi.aqi-sensitive {
-    background-color: var(--color-aqi-sensitive);
-  }
-
-  span.aqi.aqi-unhealthy {
-    background-color: var(--color-aqi-unhealthy);
-  }
-
-  span.aqi.aqi-very-unhealthy {
-    background-color: var(--color-aqi-very-unhealthy);
-  }
-
-  span.aqi.aqi-harzardous {
-    background-color: var(--color-aqi-harzardous);
-  }
-`
-
 const MetaWraper = styled.div`
   text-align: center;
   margin-bottom: 2em;
@@ -90,7 +52,7 @@ const MetaWraper = styled.div`
 
 const SensorCard = ({ deviceId, location }) => {
   const [isLastestAqiLoading, setIsLastestAqiLoading] = useState(true)
-  const [label, setLabel] = useState({ warningLabel: 'n/a', colorTag: 'na' })
+
   const [lastestAqi, setLastestAqi] = useState({
     pm25: 0,
     pm100: 0,
@@ -116,18 +78,6 @@ const SensorCard = ({ deviceId, location }) => {
         ...data,
         created_at: createdAtStr,
       })
-
-      if (data.pm25 < 26) {
-        setLabel({ warningLabel: 'Healthy', colorTag: 'healthy' })
-      } else if (data.pm25 < 38) {
-        setLabel({ warningLabel: 'Moderate', colorTag: 'moderate' })
-      } else if (data.pm25 < 51) {
-        setLabel({ warningLabel: 'Unhealthy for sensitive', colorTag: 'sensitive' })
-      } else if (data.pm25 < 91) {
-        setLabel({ warningLabel: 'Unhealthy', colorTag: 'unhealthy' })
-      } else {
-        setLabel({ warningLabel: 'Hazardous', colorTag: 'harzardous' })
-      }
 
       setIsLastestAqiLoading(false)
     })
@@ -162,9 +112,7 @@ const SensorCard = ({ deviceId, location }) => {
           PM 2.5 (µg/m<sup>3</sup>)
         </Pollutant>
         <Number>{lastestAqi.pm25}</Number>
-        <AqiWrapper>
-          <span className={`aqi aqi-${label.colorTag}`}>{label.warningLabel}</span>
-        </AqiWrapper>
+        <AqiLabel pm={lastestAqi.pm25} />
         <MetaWraper>
           <span>
             <img src="/static/img/ic-location.svg" alt="location icon" />
